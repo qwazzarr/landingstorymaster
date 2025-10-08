@@ -27,13 +27,25 @@ export default function SpotlightText({
     const el = wrapRef.current;
     if (!el) return;
 
-    const onMove = (e: MouseEvent) => {
+    const updatePosition = (x: number, y: number) => {
       const r = el.getBoundingClientRect();
-      const x = e.clientX - r.left;
-      const y = e.clientY - r.top;
-      el.style.setProperty("--mx", `${x}px`);
-      el.style.setProperty("--my", `${y}px`);
+      const posX = x - r.left;
+      const posY = y - r.top;
+      el.style.setProperty("--mx", `${posX}px`);
+      el.style.setProperty("--my", `${posY}px`);
     };
+
+    const onMove = (e: MouseEvent) => {
+      updatePosition(e.clientX, e.clientY);
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        updatePosition(touch.clientX, touch.clientY);
+      }
+    };
+
     const onLeave = () => {
       el.style.setProperty("--mx", `-9999px`);
       el.style.setProperty("--my", `-9999px`);
@@ -41,9 +53,13 @@ export default function SpotlightText({
 
     el.addEventListener("mousemove", onMove);
     el.addEventListener("mouseleave", onLeave);
+    el.addEventListener("touchmove", onTouchMove);
+    el.addEventListener("touchend", onLeave);
     return () => {
       el.removeEventListener("mousemove", onMove);
       el.removeEventListener("mouseleave", onLeave);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onLeave);
     };
   }, []);
 
