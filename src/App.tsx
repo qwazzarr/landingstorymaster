@@ -153,7 +153,7 @@ export default function App() {
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 2, ease: "easeOut" }}
       >
-        <p className="text-xs md:text-sm text-gray-500">(debut late 2025)</p>
+        <p className="text-xs md:text-sm text-gray-500">(debut Spring 2026)</p>
       </motion.div>
     </div>
   );
